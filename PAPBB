@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> E-BUKTIPID Elektronik BARANG BUKTI</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #FFD700;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            border-bottom: 5px solid #FFD700;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
+        }
+
+        .logo {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 15px;
+            background: #FFD700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+            border: 4px solid #FFA500;
+        }
+
+        .logo svg {
+            width: 55px;
+            height: 55px;
+            fill: #000000;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .header p {
+            color: #FFA500;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #1a1a1a;
+            border-bottom: 4px solid #FFD700;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 18px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 700;
+            border: none;
+            background: none;
+            font-size: 15px;
+            color: #FFD700;
+            min-width: 150px;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            background: #2d2d2d;
+            color: #FFA500;
+            transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            background: white;
+            color: #000000;
+            border-bottom: 4px solid #FFD700;
+            margin-bottom: -4px;
+        }
+
+        .content {
+            padding: 30px;
+            min-height: 500px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-title {
+            color: #000000;
+            margin-bottom: 25px;
+            border-bottom: 4px solid #FFD700;
+            padding-bottom: 15px;
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #FFD700;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 14px 35px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #000000;
+            border: 2px solid #FFA500;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.6);
+            background: linear-gradient(135deg, #FFA500 0%, #FFD700 100%);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #138496;
+        }
+
+        .code-display {
+            margin-top: 30px;
+            padding: 40px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 15px;
+            text-align: center;
+            border: 3px solid #FFD700;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .code-display h3 {
+            margin-bottom: 25px;
+            color: #000000;
+            font-size: 22px;
+        }
+
+        #qrcode, #barcode-container {
+            display: inline-block;
+            margin: 20px;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .evidence-list {
+            margin-top: 25px;
+        }
+
+        .evidence-item {
+            background: #f8f9fa;
+            border-left: 5px solid #FFD700;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        .evidence-item:hover {
+            transform: translateX(8px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+            border-left-width: 8px;
+        }
+
+        .evidence-item h4 {
+            color: #000000;
+            margin-bottom: 12px;
+            font-size: 20px;
+        }
+
+        .evidence-item p {
+            margin: 8px 0;
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .evidence-item .meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #ddd;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 25px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-tersimpan {
+            background: #28a745;
+            color: white;
+        }
+
+        .status-dikembalikan {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .status-selesai {
+            background: #6c757d;
+            color: white;
+        }
+
+        .status-keluar {
+            background: #dc3545;
+            color: white;
+        }
+
+        .search-box {
+            margin-bottom: 25px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 3px solid #FFD700;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.2);
+        }
+
+        .detail-view {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 25px;
+            border: 2px solid #FFD700;
+        }
+
+        .detail-view h3 {
+            color: #000000;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #FFD700;
+            font-size: 20px;
+        }
+
+        .detail-row {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            padding: 15px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-row strong {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .alert {
+            padding: 18px 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-weight: 500;
+            border: 2px solid;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border-color: #ffeaa7;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-color: #bee5eb;
+        }
+
+        .scanner-container {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 12px;
+            border: 3px solid #FFD700;
+        }
+
+        #reader {
+            max-width: 550px;
+            margin: 25px auto;
+            border: 4px solid #FFD700;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .scan-status {
+            text-align: center;
+            padding: 18px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: 600;
+            border: 2px solid #ddd;
+        }
+
+        .scan-status.active {
+            background: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            color: #000000;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.5);
+        }
+
+        .stat-card h4 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .stat-card .number {
+            font-size: 48px;
+            font-weight: 900;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-box {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 5px solid #FFA500;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #000;
+        }
+
+        .info-box small {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tab {
+                font-size: 13px;
+                padding: 15px 8px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .code-display, .code-display * {
+                visibility: visible;
+            }
+            .code-display {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <image src="Png.jpg"width="250px"></image>
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+                </svg>
+            </div>
+            <h1> E-BUKTI</h1>
+            <p>🔍Digitalisasi Pendataan Barang Bukti</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('input')">📝 Input Barang Bukti</button>
+            <button class="nav-tab" onclick="showTab('scan')">📷 Scan QR Code</button>
+            <button class="nav-tab" onclick="showTab('list')">📋 Daftar Barang Bukti</button>
+            <button class="nav-tab" onclick="showTab('return')">📥 Pengembalian</button>
+            <button class="nav-tab" onclick="showTab('report')">📊 Laporan</button>
+        </div>
+
+        <div class="content">
+            <!-- Tab Input Barang Bukti -->
+            <div id="tab-input" class="tab-content active">
+                <h2 class="page-title">Input Data Barang Bukti Baru</h2>
+                
+                <form id="evidenceForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nomor Barang Bukti *</label>
+                            <input type="text" id="evidenceNo" required placeholder="Contoh: BB-2025-001">
+                        </div>
+                        <div class="form-group">
+                            <label>Nomor Perkara *</label>
+                            <input type="text" id="caseNo" required placeholder="Contoh: LP/001/XI/2025">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Jenis Barang Bukti *</label>
+                            <select id="evidenceType" required>
+                                <option value="">-- Pilih Jenis --</option>
+                                <option value="Senjata">Senjata</option>
+                                <option value="Narkotika">Narkotika</option>
+                                <option value="Elektronik">Elektronik</option>
+                                <option value="Dokumen">Dokumen</option>
+                                <option value="Kendaraan">Kendaraan</option>
+                                <option value="Uang">Uang</option>
+                                <option value="Perhiasan">Perhiasan</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Kategori Perkara *</label>
+                            <select id="caseCategory" required>
+                                <option value="">-- Pilih Kategori --</option>
+                                <option value="Pidana Umum">Pidana Umum</option>
+                                <option value="Narkotika">Narkotika</option>
+                                <option value="Korupsi">Korupsi</option>
+                                <option value="Pencurian">Pencurian</option>
+                                <option value="Pembunuhan">Pembunuhan</option>
+                                <option value="Penipuan">Penipuan</option>
+                                <option value="Penggelapan">Penggelapan</option>
+                                <option value="Penggelapan">Penggelapan</option>
+                                <option value="Penganiayaan">Penganiayaan</option>
+                                <option value="Pemerkosaan">Pemerkosaan</option>
+                                <option value="Pencabulan">Pencabulan</option>
+                                <option value="Perampasan">Perampasan</option>
+                                <option value="Persetubuhan Anak dibawah Umur">Persetubuhan Anak dibawah Umur</option>
+                                <option value="Penggandaan Perkawinan">Penggandaan Perkawinan</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Deskripsi Barang Bukti *</label>
+                        <textarea id="description" required placeholder="Jelaskan secara detail barang bukti yang disita..."></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Lokasi Penyitaan *</label>
+                            <input type="text" id="location" required placeholder="Contoh: Jl. Sudirman No. 123, Jakarta">
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal Penyitaan *</label>
+                            <input type="date" id="seizureDate" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nama Penyidik *</label>
+                            <input type="text" id="investigator" required placeholder="Nama lengkap penyidik">
+                        </div>
+                        <div class="form-group">
+                            <label>NRP Penyidik *</label>
+                            <input type="text" id="investigatorId" required placeholder="Nomor NRP">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Catatan Tambahan</label>
+                        <textarea id="notes" placeholder="Catatan atau informasi tambahan..."></textarea>
+                    </div>
+
+                    <div style="margin-top: 30px;">
+                        <button type="submit" class="btn btn-primary">💾 Simpan & Generate QR Code</button>
+                        <button type="reset" class="btn btn-secondary">🔄 Reset Form</button>
+                    </div>
+                </form>
+
+                <div id="generatedCodes" class="code-display" style="display: none;">
+                    <h3>✅ QR Code & Barcode Berhasil Dibuat</h3>
+                    <div id="qrcode"></div>
+                    <div id="barcode-container">
+                        <svg id="barcode"></svg>
+                    </div>
+                    <div style="margin-top: 25px;">
+                        <button onclick="printCodes()" class="btn btn-success">🖨️ Cetak QR/Barcode</button>
+                        <button onclick="downloadCodes()" class="btn btn-info">⬇️ Download</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Scan QR Code -->
+            <div id="tab-scan" class="tab-content">
+                <h2 class="page-title">Scan QR Code Barang Bukti</h2>
+                
+                <div class="scanner-container">
+                    <div style="margin-bottom: 20px;">
+                        <button onclick="startCamera()" class="btn btn-primary">📷 Buka Kamera</button>
+                        <button onclick="stopCamera()" class="btn btn-secondary">⏹️ Tutup Kamera</button>
+                    </div>
+
+                    <div id="scanStatus" class="scan-status" style="display: none;">
+                        Siap untuk scan...
+                    </div>
+
+                    <div id="reader" style="display: none;"></div>
+
+                    <div style="margin: 30px 0; font-weight: 600; font-size: 18px;">ATAU</div>
+
+                    <div class="form-group">
+                        <label>Masukkan Nomor Barang Bukti Secara Manual</label>
+                        <input type="text" id="scanInput" placeholder="Ketik nomor barang bukti...">
+                    </div>
+                    <button onclick="searchEvidence()" class="btn btn-primary">🔍 Cari Barang Bukti</button>
+                </div>
+
+                <div id="scanResult"></div>
+            </div>
+
+            <!-- Tab Daftar Barang Bukti -->
+            <div id="tab-list" class="tab-content">
+                <h2 class="page-title">Daftar Semua Barang Bukti</h2>
+                
+                <div class="search-box">
+                    <input type="text" id="searchList" placeholder="🔍 Cari berdasarkan nomor barang bukti, nomor perkara, atau jenis..." onkeyup="filterList()">
+                </div>
+
+                <div id="evidenceList" class="evidence-list"></div>
+            </div>
+
+            <!-- Tab Pengembalian -->
+            <div id="tab-return" class="tab-content">
+                <h2 class="page-title">Pengembalian Barang Bukti</h2>
+                
+                <div class="alert alert-info">
+                    ℹ️ <strong>Informasi:</strong> Gunakan halaman ini untuk mencatat pengembalian barang bukti yang telah keluar.
+                </div>
+
+                <div class="search-box">
+                    <label style="font-weight: 600; display: block; margin-bottom: 10px;">Cari Barang Bukti yang Keluar</label>
+                    <input type="text" id="searchReturn" placeholder="🔍 Ketik nomor barang bukti..." onkeyup="searchForReturn()">
+                </div>
+
+                <div id="returnSearchResult"></div>
+
+                <form id="returnForm" style="display: none;">
+                    <div class="detail-view">
+                        <h3>📦 Informasi Barang Bukti</h3>
+                        <div id="returnEvidenceInfo"></div>
+                    </div>
+
+                    <h3 style="margin: 30px 0 20px; color: #000; border-bottom: 3px solid #FFD700; padding-bottom: 10px;">Data Pengembalian</h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tanggal Pengembalian *</label>
+                            <input type="date" id="returnDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Waktu Pengembalian *</label>
+                            <input type="time" id="returnTime" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Dikembalikan Oleh *</label>
+                            <input type="text" id="returnedBy" required placeholder="Nama yang mengembalikan">
+                        </div>
+                        <div class="form-group">
+                            <label>Diterima Oleh (Petugas) *</label>
+                            <input type="text" id="receivedBy" required placeholder="Nama petugas penerima">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Kondisi Barang *</label>
+                        <select id="returnCondition" required>
+                            <option value="">-- Pilih Kondisi --</option>
+                            <option value="Baik/Lengkap">Baik/Lengkap</option>
+                            <option value="Rusak Ringan">Rusak Ringan</option>
+                            <option value="Rusak Berat">Rusak Berat</option>
+                            <option value="Tidak Lengkap">Tidak Lengkap</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Catatan Pengembalian</label>
+                        <textarea id="returnNotes" placeholder="Catatan kondisi atau keterangan lainnya..."></textarea>
+                    </div>
+
+                    <div style="margin-top: 30px;">
+                        <button type="submit" class="btn btn-primary">✅ Proses Pengembalian</button>
+                        <button type="button" onclick="cancelReturn()" class="btn btn-secondary">❌ Batal</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tab Laporan -->
+            <div id="tab-report" class="tab-content">
+                <h2 class="page-title">Laporan & Statistik</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4>📦 Total Barang Bukti</h4>
+                        <div class="number" id="totalEvidence">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>📅 Barang Bukti Bulan Ini</h4>
+                        <div class="number" id="monthlyEvidence">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>🟢 Tersimpan</h4>
+                        <div class="number" id="storedEvidence">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>🔵 Dikembalikan</h4>
+                        <div class="number" id="returnedEvidence">0</div>
+                    </div>
+                </div>
+
+                <div class="detail-view">
+                    <h3>📊 Statistik Berdasarkan Jenis Barang Bukti</h3>
+                    <div id="statisticsByType"></div>
+                </div>
+
+                <div class="detail-view" style="margin-top: 25px;">
+                    <h3>⚖️ Statistik Berdasarkan Kategori Perkara</h3>
+                    <div id="statisticsByCase"></div>
+                </div>
+
+                <div class="detail-view" style="margin-top: 25px;">
+                    <h3>📈 Status Barang Bukti</h3>
+                    <div id="statisticsByStatus"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let evidenceData = [];
+        let html5QrCode = null;
+        let isCameraActive = false;
+        let selectedEvidence = null;
+
+        // Load data saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            displayEvidenceList();
+            updateStatistics();
+            
+            const today = new Date().toISOString().split('T')[0];
+            const now = new Date().toTimeString().slice(0,5);
+            
+            if (document.getElementById('returnDate')) {
+                document.getElementById('returnDate').value = today;
+                document.getElementById('returnTime').value = now;
+            }
+        });
+
+        // Load data dari localStorage
+        function loadData() {
+            const stored = localStorage.getItem('evidenceData');
+            if (stored) {
+                evidenceData = JSON.parse(stored);
+            }
+        }
+
+        // Save data ke localStorage
+        function saveData() {
+            localStorage.setItem('evidenceData', JSON.stringify(evidenceData));
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const buttons = document.querySelectorAll('.nav-tab');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById('tab-' + tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'list') {
+                displayEvidenceList();
+            } else if (tabName === 'report') {
+                updateStatistics();
+            }
+        }
+
+        // Form submission - Input Barang Bukti
+        document.getElementById('evidenceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const evidence = {
+                id: Date.now().toString(),
+                evidenceNo: document.getElementById('evidenceNo').value,
+                caseNo: document.getElementById('caseNo').value,
+                evidenceType: document.getElementById('evidenceType').value,
+                caseCategory: document.getElementById('caseCategory').value,
+                description: document.getElementById('description').value,
+                location: document.getElementById('location').value,
+                seizureDate: document.getElementById('seizureDate').value,
+                investigator: document.getElementById('investigator').value,
+                investigatorId: document.getElementById('investigatorId').value,
+                notes: document.getElementById('notes').value,
+                registrationDate: new Date().toISOString(),
+                status: 'tersimpan'
+            };
+
+            evidenceData.push(evidence);
+            saveData();
+
+            generateCodes(evidence);
+
+            alert('✅ Data barang bukti berhasil disimpan dan QR Code telah dibuat!');
+            this.reset();
+            updateStatistics();
+        });
+
+        // Generate QR Code dan Barcode
+        function generateCodes(evidence) {
+            const codeData = JSON.stringify({
+                no: evidence.evidenceNo,
+                case: evidence.caseNo,
+                type: evidence.evidenceType,
+                date: evidence.seizureDate
+            });
+
+            document.getElementById('qrcode').innerHTML = '';
+            
+            new QRCode(document.getElementById('qrcode'), {
+                text: codeData,
+                width: 200,
+                height: 200,
+                colorDark: "#000000",
+                colorLight: "#FFD700",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            JsBarcode("#barcode", evidence.evidenceNo, {
+                format: "CODE128",
+                width: 2,
+                height: 100,
+                displayValue: true,
+                fontSize: 16,
+                margin: 10
+            });
+
+            document.getElementById('generatedCodes').style.display = 'block';
+        }
+
+        // Start camera untuk scanning
+        function startCamera() {
+            if (isCameraActive) {
+                alert('⚠️ Kamera sudah aktif!');
+                return;
+            }
+
+            const readerDiv = document.getElementById('reader');
+            const statusDiv = document.getElementById('scanStatus');
+            
+            readerDiv.style.display = 'block';
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'scan-status active';
+            statusDiv.textContent = '📷 Kamera aktif - Arahkan ke QR Code...';
+
+            html5QrCode = new Html5Qrcode("reader");
+            
+            const config = {
+                fps: 10,
+                qrbox: { width: 250, height: 250 }
+            };
+
+            html5QrCode.start(
+                { facingMode: "environment" },
+                config,
+                (decodedText) => {
+                    statusDiv.className = 'scan-status active';
+                    statusDiv.textContent = '✅ QR Code terdeteksi!';
+                    
+                    document.getElementById('scanInput').value = decodedText;
+                    displayEvidenceResult(decodedText);
+                    
+                    setTimeout(() => {
+                        stopCamera();
+                    }, 1000);
+                }
+            ).then(() => {
+                isCameraActive = true;
+            }).catch((err) => {
+                statusDiv.className = 'scan-status';
+                statusDiv.style.background = '#f8d7da';
+                statusDiv.style.color = '#721c24';
+                statusDiv.textContent = '❌ Gagal mengakses kamera: ' + err;
+            });
+        }
+
+        // Stop camera
+        function stopCamera() {
+            if (!isCameraActive || !html5QrCode) return;
+
+            html5QrCode.stop().then(() => {
+                isCameraActive = false;
+                document.getElementById('reader').style.display = 'none';
+                document.getElementById('scanStatus').style.display = 'none';
+                html5QrCode = null;
+            }).catch((err) => {
+                console.error('Error:', err);
+            });
+        }
+
+        // Search evidence
+        function searchEvidence() {
+            const searchValue = document.getElementById('scanInput').value.trim();
+            
+            if (!searchValue) {
+                alert('⚠️ Silakan masukkan nomor barang bukti!');
+                return;
+            }
+
+            displayEvidenceResult(searchValue);
+        }
+
+        // Display evidence result
+        function displayEvidenceResult(searchValue) {
+            let evidenceNo = searchValue;
+            try {
+                const parsed = JSON.parse(searchValue);
+                if (parsed.no) evidenceNo = parsed.no;
+            } catch (e) {}
+
+            const result = evidenceData.find(e => e.evidenceNo === evidenceNo);
+            const resultDiv = document.getElementById('scanResult');
+
+            if (result) {
+                let statusInfo = '';
+                if (result.returnData) {
+                    statusInfo = `
+                        <div class="info-box" style="background: #d1ecf1; border-left-color: #17a2b8;">
+                            <strong>📥 Informasi Pengembalian:</strong>
+                            <small>
+                                Dikembalikan: ${formatDate(result.returnData.returnDate)} ${result.returnData.returnTime}<br>
+                                Kondisi: ${result.returnData.returnCondition}<br>
+                                Diterima oleh: ${result.returnData.receivedBy}
+                            </small>
+                        </div>
+                    `;
+                }
+
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        ✅ Barang bukti berhasil ditemukan!
+                    </div>
+                    <div class="detail-view">
+                        <h3>📦 Detail Barang Bukti</h3>
+                        <div class="detail-row">
+                            <strong>Nomor Barang Bukti:</strong>
+                            <span>${result.evidenceNo}</span>
+                        </div>
+                        <div class="detail-row">
+                            <strong>Nomor Perkara:</strong>
+                            <span>${result.caseNo}</span>
+                        </div>
+                        <div class="detail-row">
+                            <strong>Jenis:</strong>
+                            <span>${result.evidenceType}</span>
+                        </div>
+                        <div class="detail-row">
+                            <strong>Kategori Perkara:</strong>
+                            <span>${result.caseCategory}</span>
+                        </div>
+                        <div class="detail-row">
+                            <strong>Deskripsi:</strong>
+                            <span>${result.description}</span>
+                        </div>
+                        <div class="detail-row">
+                            <strong>Lokasi Penyitaan:</strong>
+                            <span>${result.location}</span>
+                        </div>
+                        <div class="detail-row">
+                            <strong>Tanggal Penyitaan:</strong>
+                            <span>${formatDate(result.seizureDate)}</span>
+                        </div>
+                        <div class="detail-row">
+                            <strong>Penyidik:</strong>
+                            <span>${result.investigator} (${result.investigatorId})</span>
+                        </div>
+                        <div class="detail-row">
+                            <strong>Status:</strong>
+                            <span><span class="status-badge status-${result.status}">${result.status.toUpperCase()}</span></span>
+                        </div>
+                        ${result.notes ? `
+                        <div class="detail-row">
+                            <strong>Catatan:</strong>
+                            <span>${result.notes}</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                    ${statusInfo}
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-error">
+                        ❌ Barang bukti dengan nomor "<strong>${evidenceNo}</strong>" tidak ditemukan.
+                    </div>
+                `;
+            }
+        }
+
+        // Display evidence list
+        function displayEvidenceList() {
+            const listDiv = document.getElementById('evidenceList');
+            
+            if (evidenceData.length === 0) {
+                listDiv.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">Belum ada data barang bukti.</p>';
+                return;
+            }
+
+            listDiv.innerHTML = evidenceData.map(e => {
+                let statusInfo = '';
+                if (e.returnData) {
+                    statusInfo = `
+                        <div class="info-box" style="background: #d1ecf1; border-left-color: #17a2b8;">
+                            <strong>📥 Dikembalikan:</strong>
+                            <small>${formatDate(e.returnData.returnDate)} | Kondisi: ${e.returnData.returnCondition}</small>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="evidence-item">
+                        <h4>📦 ${e.evidenceNo}</h4>
+                        <p><strong>Perkara:</strong> ${e.caseNo}</p>
+                        <p><strong>Jenis:</strong> ${e.evidenceType} | <strong>Kategori:</strong> ${e.caseCategory}</p>
+                        <p><strong>Deskripsi:</strong> ${e.description}</p>
+                        <p><strong>Lokasi Penyitaan:</strong> ${e.location}</p>
+                        ${statusInfo}
+                        <div class="meta">
+                            <span>📅 ${formatDate(e.seizureDate)}</span>
+                            <span>👮 ${e.investigator}</span>
+                            <span class="status-badge status-${e.status}">${e.status.toUpperCase()}</span>
+                            <button class="btn btn-danger" onclick="deleteEvidence('${e.id}')">🗑️ Hapus</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Filter list
+        function filterList() {
+            const searchTerm = document.getElementById('searchList').value.toLowerCase();
+            const items = document.querySelectorAll('.evidence-item');
+
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(searchTerm) ? 'block' : 'none';
+            });
+        }
+
+        // Delete evidence
+        function deleteEvidence(id) {
+            if (confirm('⚠️ Apakah Anda yakin ingin menghapus barang bukti ini?')) {
+                evidenceData = evidenceData.filter(e => e.id !== id);
+                saveData();
+                displayEvidenceList();
+                updateStatistics();
+                alert('✅ Barang bukti berhasil dihapus.');
+            }
+        }
+
+        // Search for return
+        function searchForReturn() {
+            const searchValue = document.getElementById('searchReturn').value.trim();
+            const resultDiv = document.getElementById('returnSearchResult');
+
+            if (searchValue.length < 3) {
+                resultDiv.innerHTML = '';
+                return;
+            }
+
+            const results = evidenceData.filter(e => 
+                e.evidenceNo.toLowerCase().includes(searchValue.toLowerCase()) &&
+                e.status === 'keluar'
+            );
+
+            if (results.length === 0) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-error">
+                        ❌ Tidak ada barang bukti yang sedang keluar dengan nomor tersebut.
+                    </div>
+                `;
+                return;
+            }
+
+            resultDiv.innerHTML = results.map(e => `
+                <div class="evidence-item" style="cursor: pointer;" onclick="selectForReturn('${e.id}')">
+                    <h4>📦 ${e.evidenceNo}</h4>
+                    <p><strong>Perkara:</strong> ${e.caseNo}</p>
+                    <p><strong>Jenis:</strong> ${e.evidenceType}</p>
+                    <div class="meta">
+                        <span class="status-badge status-keluar">KELUAR</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Select for return
+        function selectForReturn(id) {
+            selectedEvidence = evidenceData.find(e => e.id === id);
+            if (!selectedEvidence) return;
+
+            document.getElementById('returnEvidenceInfo').innerHTML = `
+                <div class="detail-row">
+                    <strong>Nomor Barang Bukti:</strong>
+                    <span>${selectedEvidence.evidenceNo}</span>
+                </div>
+                <div class="detail-row">
+                    <strong>Nomor Perkara:</strong>
+                    <span>${selectedEvidence.caseNo}</span>
+                </div>
+                <div class="detail-row">
+                    <strong>Jenis:</strong>
+                    <span>${selectedEvidence.evidenceType}</span>
+                </div>
+                <div class="detail-row">
+                    <strong>Deskripsi:</strong>
+                    <span>${selectedEvidence.description}</span>
+                </div>
+            `;
+
+            document.getElementById('returnForm').style.display = 'block';
+            document.getElementById('returnSearchResult').innerHTML = '';
+        }
+
+        // Return form submission
+        document.getElementById('returnForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (!selectedEvidence) {
+                alert('⚠️ Silakan pilih barang bukti terlebih dahulu!');
+                return;
+            }
+
+            const returnData = {
+                returnDate: document.getElementById('returnDate').value,
+                returnTime: document.getElementById('returnTime').value,
+                returnedBy: document.getElementById('returnedBy').value,
+                receivedBy: document.getElementById('receivedBy').value,
+                returnCondition: document.getElementById('returnCondition').value,
+                returnNotes: document.getElementById('returnNotes').value,
+                returnTimestamp: new Date().toISOString()
+            };
+
+            const idx = evidenceData.findIndex(e => e.id === selectedEvidence.id);
+            evidenceData[idx].status = 'dikembalikan';
+            evidenceData[idx].returnData = returnData;
+
+            saveData();
+
+            alert('✅ Pengembalian barang bukti berhasil dicatat!\n\nNomor: ' + selectedEvidence.evidenceNo);
+
+            this.reset();
+            document.getElementById('returnForm').style.display = 'none';
+            selectedEvidence = null;
+            document.getElementById('searchReturn').value = '';
+            
+            updateStatistics();
+            displayEvidenceList();
+        });
+
+        // Cancel return
+        function cancelReturn() {
+            if (confirm('❌ Apakah Anda yakin ingin membatalkan?')) {
+                document.getElementById('returnForm').reset();
+                document.getElementById('returnForm').style.display = 'none';
+                selectedEvidence = null;
+            }
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            const total = evidenceData.length;
+            document.getElementById('totalEvidence').textContent = total;
+
+            // Monthly count
+            const now = new Date();
+            const monthly = evidenceData.filter(e => {
+                const date = new Date(e.registrationDate);
+                return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+            }).length;
+            document.getElementById('monthlyEvidence').textContent = monthly;
+
+            // By status
+            const stored = evidenceData.filter(e => e.status === 'tersimpan').length;
+            const returned = evidenceData.filter(e => e.status === 'dikembalikan').length;
+            document.getElementById('storedEvidence').textContent = stored;
+            document.getElementById('returnedEvidence').textContent = returned;
+
+            // By type
+            const typeStats = {};
+            evidenceData.forEach(e => {
+                typeStats[e.evidenceType] = (typeStats[e.evidenceType] || 0) + 1;
+            });
+
+            document.getElementById('statisticsByType').innerHTML = 
+                Object.entries(typeStats).length > 0 ?
+                Object.entries(typeStats).map(([type, count]) => `
+                    <div class="detail-row">
+                        <strong>${type}:</strong>
+                        <span>${count} barang bukti (${((count/total)*100).toFixed(1)}%)</span>
+                    </div>
+                `).join('') : '<p style="color: #666; padding: 20px;">Belum ada data</p>';
+
+            // By case category
+            const caseStats = {};
+            evidenceData.forEach(e => {
+                caseStats[e.caseCategory] = (caseStats[e.caseCategory] || 0) + 1;
+            });
+
+            document.getElementById('statisticsByCase').innerHTML = 
+                Object.entries(caseStats).length > 0 ?
+                Object.entries(caseStats).map(([cat, count]) => `
+                    <div class="detail-row">
+                        <strong>${cat}:</strong>
+                        <span>${count} perkara (${((count/total)*100).toFixed(1)}%)</span>
+                    </div>
+                `).join('') : '<p style="color: #666; padding: 20px;">Belum ada data</p>';
+
+            // By status
+            const statusStats = {
+                'Tersimpan': evidenceData.filter(e => e.status === 'tersimpan').length,
+                'Keluar': evidenceData.filter(e => e.status === 'keluar').length,
+                'Dikembalikan': evidenceData.filter(e => e.status === 'dikembalikan').length,
+                'Selesai': evidenceData.filter(e => e.status === 'selesai').length
+            };
+
+            document.getElementById('statisticsByStatus').innerHTML = 
+                Object.entries(statusStats).map(([status, count]) => `
+                    <div class="detail-row">
+                        <strong>${status}:</strong>
+                        <span>${count} barang bukti (${total > 0 ? ((count/total)*100).toFixed(1) : 0}%)</span>
+                    </div>
+                `).join('');
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('id-ID', { 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric' 
+            });
+        }
+
+        // Print codes
+        function printCodes() {
+            window.print();
+        }
+
+        // Download codes
+        function downloadCodes() {
+            alert('💡 Tip: Gunakan tombol Print dan pilih "Save as PDF" untuk menyimpan QR/Barcode.');
+        }
+    </script>
+</body>
+</html>
